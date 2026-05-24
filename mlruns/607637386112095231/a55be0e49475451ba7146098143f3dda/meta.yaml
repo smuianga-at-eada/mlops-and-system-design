@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/607637386112095231/a55be0e49475451ba7146098143f3dda/artifacts
+end_time: 1779641432490
+entry_point_name: ''
+experiment_id: '607637386112095231'
+lifecycle_stage: active
+run_id: a55be0e49475451ba7146098143f3dda
+run_name: placid-shrew-290
+run_uuid: a55be0e49475451ba7146098143f3dda
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1779641429803
+status: 3
+tags: []
+user_id: shelciamuianga
