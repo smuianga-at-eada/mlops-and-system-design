@@ -1,0 +1,298 @@
+{
+  "info": {
+    "name": "Stock Management API",
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "description": "Postman collection for the Stock Management API assignment. Covers all CRUD endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET all stocks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks"]
+        },
+        "description": "Returns the full list of stocks with no filters applied."
+      }
+    },
+    {
+      "name": "GET stocks – filter by symbol",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks?symbol=AAPL",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks"],
+          "query": [{ "key": "symbol", "value": "AAPL" }]
+        },
+        "description": "Exact match on stock symbol."
+      }
+    },
+    {
+      "name": "GET stocks – filter by company_name (substring)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks?company_name=apple",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks"],
+          "query": [{ "key": "company_name", "value": "apple" }]
+        },
+        "description": "Case-insensitive substring match on company name."
+      }
+    },
+    {
+      "name": "GET stocks – filter by min_price",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks?min_price=100.0",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks"],
+          "query": [{ "key": "min_price", "value": "100.0" }]
+        },
+        "description": "Returns stocks with price >= 100.0."
+      }
+    },
+    {
+      "name": "GET stocks – filter by min_market_cap",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks?min_market_cap=1000000000",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks"],
+          "query": [{ "key": "min_market_cap", "value": "1000000000" }]
+        },
+        "description": "Returns stocks with market_cap >= 1 billion."
+      }
+    },
+    {
+      "name": "GET stocks – invalid min_price (400)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks?min_price=abc",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks"],
+          "query": [{ "key": "min_price", "value": "abc" }]
+        },
+        "description": "Expects 400 Bad Request because min_price is not a valid float."
+      }
+    },
+    {
+      "name": "POST create stock",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"symbol\": \"AAPL\",\n  \"company_name\": \"Apple Inc.\",\n  \"price\": 198.45,\n  \"market_cap\": 3200000000000\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks"]
+        },
+        "description": "Creates a new stock. Returns 201 on success."
+      }
+    },
+    {
+      "name": "POST create stock – no market_cap (optional field)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"symbol\": \"TSLA\",\n  \"company_name\": \"Tesla Inc.\",\n  \"price\": 250.00\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks"]
+        },
+        "description": "market_cap is optional and can be omitted entirely."
+      }
+    },
+    {
+      "name": "POST create stock – duplicate symbol (409)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"symbol\": \"AAPL\",\n  \"company_name\": \"Duplicate Apple\",\n  \"price\": 100.0\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks"]
+        },
+        "description": "Expects 409 Conflict because AAPL already exists."
+      }
+    },
+    {
+      "name": "POST create stock – missing required field (400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"company_name\": \"No Symbol Corp\",\n  \"price\": 50.0\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks"]
+        },
+        "description": "Expects 400 because 'symbol' is missing."
+      }
+    },
+    {
+      "name": "GET stock by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks/1",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks", "1"]
+        },
+        "description": "Retrieves the stock with id=1. Returns 200 or 404."
+      }
+    },
+    {
+      "name": "GET stock by ID – not found (404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks/9999",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks", "9999"]
+        },
+        "description": "Expects 404 because stock id 9999 does not exist."
+      }
+    },
+    {
+      "name": "PUT update stock by ID",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"symbol\": \"AAPL\",\n  \"company_name\": \"Apple Inc. (Updated)\",\n  \"price\": 210.00,\n  \"market_cap\": 3300000000000\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks/1",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks", "1"]
+        },
+        "description": "Updates stock with id=1. Returns 200 on success."
+      }
+    },
+    {
+      "name": "PUT update stock – not found (404)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"symbol\": \"GHOST\",\n  \"company_name\": \"Ghost Corp\",\n  \"price\": 1.0\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks/9999",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks", "9999"]
+        },
+        "description": "Expects 404 because stock id 9999 does not exist."
+      }
+    },
+    {
+      "name": "PUT update stock – symbol conflict (409)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"symbol\": \"TSLA\",\n  \"company_name\": \"Apple Renamed\",\n  \"price\": 210.00\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks/1",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks", "1"]
+        },
+        "description": "Expects 409 because TSLA is already used by another stock (id=2)."
+      }
+    },
+    {
+      "name": "DELETE stock by ID",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks/1",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks", "1"]
+        },
+        "description": "Deletes stock with id=1. Returns 204 No Content on success."
+      }
+    },
+    {
+      "name": "DELETE stock by ID – not found (404)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/stocks/9999",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "5000",
+          "path": ["api", "stocks", "9999"]
+        },
+        "description": "Expects 404 because stock id 9999 does not exist."
+      }
+    }
+  ]
+}
